@@ -21,6 +21,7 @@
 #include <RAT/DS/MCTrack.hh>
 #include <RAT/DS/MCSummary.hh>
 #include <RAT/DS/MCPMT.hh>
+#include <RAT/DS/MCHit.hh>
 
 namespace RAT {
   namespace DS {
@@ -93,6 +94,21 @@ public:
   };
   virtual void PrunePMT() { pmt.resize(0); }
 
+  /** List of hit channels */
+  virtual MCHit* GetMCHit(int i) { return &hit[i]; }
+  virtual int GetMCHitCount() const { return hit.size(); }
+  virtual MCHit* AddNewMCHit() {
+    hit.resize(hit.size() + 1);
+    return &hit.back();
+  };
+  virtual void PruneMCHit() { hit.resize(0); }
+
+  // Sort by hit time
+  typedef bool (*MCHitSortFcn)(DS::MCHit& a, MCHit& b);
+  virtual inline void SortMCHit(MCHitSortFcn fcn) {
+    std::sort(hit.begin(), hit.end(), fcn);
+  }
+
   /** Total number of photoelectrons generated in this event */
   virtual int GetNumPE() const { return numPE; }
   virtual void SetNumPE(int _numPE) { numPE = _numPE; }
@@ -114,14 +130,15 @@ public:
   ClassDef(MC, 1)
     
 protected:
-  int id;
-  int numPE;
-  int numDarkHits;
-  TTimeStamp utc;
-  std::vector<MCSummary> summary;
-  std::vector<MCParticle> particle;
-  std::vector<MCTrack> track;
-  std::vector<MCPMT> pmt;
+  int id;  //< ID number for this physics event
+  int numPE;  //< Number of detected photoelectrons
+  int numDarkHits;  //< Number of "dark" noise hits
+  TTimeStamp utc;  //< Time of the event (UTC)
+  std::vector<MCSummary> summary;  //< Collected summary data
+  std::vector<MCParticle> particle;  //< List of primary particles
+  std::vector<MCTrack> track;  //< List of tracks, if enabled
+  std::vector<MCPMT> pmt;  //< List of MC truth PMTs
+  std::vector<MCHit> hit;  //< List of MC truth electronics hits
 };
 
   } // namespace DS

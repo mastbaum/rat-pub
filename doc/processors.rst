@@ -149,3 +149,75 @@ Parameters
 The "load balancing" mentioned above distributes events by checking to see which sockets are available for writing and picking the first one that can be found.  The assumption is that busy nodes will have a backlog of events, so their sockets will be full.  In principle, this means that a few slow nodes won't hold up the rest of the group.
 
 This processor and its [wiki:UserGuideInNet sibling event producer] have no security whatsoever.  Don't use your credit card number as a seed for the Monte Carlo.
+
+frontend
+````````
+
+Semi-generic simulation of front-end electronics: the charge spectrum and the
+grouping of hits on PMTs depending on a user-defined sampling window. The
+front-end end may be configured like a digitizer (many samples per PMT per
+event) including the limit of a sampling electronics (like a slow digitizer),
+where each PMT records only one sample per event window.
+
+Use in combination: frontend, trigger, eventbuilder.
+
+Command
+'''''''
+
+::
+
+    /rat/proc frontend
+
+Parameters
+''''''''''
+None. Configurable via DAQ RATDB table: sampling time, channel threshold,
+trigger pulse width, trigger noise amplitude, and the trigger gate delay.
+
+trigger
+```````
+
+A simulation of an analog majority trigger system.
+
+Each detected photoelectrons contributes a fixed-width square pulse to
+an analog trigger sum waveform, and the amplitude of this waveform (with
+Gaussian noise added) is compared to a threshold in number of hits (Nhit).
+
+When the trigger fires, one or more new event (EV) objects are created in
+the data structure, depending on the timing of the hits and the length
+of the event window.
+
+Use in combination: frontend, trigger, eventbuilder.
+
+Command
+'''''''
+
+::
+
+    /rat/proc trigger
+
+Parameters
+''''''''''
+None. The length of the trigger window, width of the trigger pulses, and the
+Nhit threshold are adjustable via parameters in the DAQ table;
+see DAQ.ratdb.
+
+eventbuilder
+````````````
+
+Maps MC truth hit information to detected hit information for triggered
+events. This processor populates the EV data structure.
+
+Use in combination: frontend, trigger, eventbuilder.
+
+Command
+'''''''
+
+::
+
+    /rat/proc eventbuilder
+
+Parameters
+''''''''''
+None. Configurable via DAQ RATDB: delay of trigger back to the front end and
+the width of the trigger gate within which to collect hits.
+

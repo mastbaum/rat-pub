@@ -16,6 +16,9 @@
 #include <RAT/PruneProc.hh>
 #include <RAT/FitCentroidProc.hh>
 #include <RAT/SimpleDAQProc.hh>
+#include <RAT/EventBuilderProc.hh>
+#include <RAT/FrontEndProc.hh>
+#include <RAT/TriggerProc.hh>
 
 namespace RAT {
 
@@ -62,7 +65,10 @@ ProcBlockManager::ProcBlockManager(ProcBlock *theMainBlock)
   procAllocators["fitcentroid"] = new ProcAllocatorTmpl<FitCentroidProc>;
 
   // DAQ
-  procAllocators["simpledaq"]= new ProcAllocatorTmpl<SimpleDAQProc>;
+  procAllocators["simpledaq"] = new ProcAllocatorTmpl<SimpleDAQProc>;
+  procAllocators["eventbuilder"] = new ProcAllocatorTmpl<EventBuilderProc>;
+  procAllocators["frontend"] = new ProcAllocatorTmpl<FrontEndProc>;
+  procAllocators["trigger"] = new ProcAllocatorTmpl<TriggerProc>;
 
   // Misc
   procAllocators["count"] = new ProcAllocatorTmpl<CountProc>;
