@@ -6,8 +6,9 @@
 #ifndef __RAT_DetectorConstruction__
 #define __RAT_DetectorConstruction__
 
-#include <vector>
+#include <map>
 #include <G4VUserDetectorConstruction.hh>
+#include <RAT/DetectorComponent.hh>
 
 class G4VPhysicalVolume;
 
@@ -31,11 +32,13 @@ public:
 
   // Register a detector component
   void RegisterComponent(DetectorComponent* comp) {
-    fComponents.push_back(comp);
+    fComponents[comp->GetName()] = comp;
   }
 
-  // Get the list of all registered detector components
-  std::vector<DetectorComponent*> GetComponents() const { return fComponents; }
+  // Get the set of all registered detector components as a map
+  std::map<std::string, DetectorComponent*> GetComponents() const {
+    return fComponents;
+  }
 
   static DetectorConstruction* GetDetectorConstruction();
 
@@ -44,7 +47,7 @@ protected:
   G4VPhysicalVolume* fWorldPhys;
 
   /** A registry of the DetectorComponents */
-  std::vector<DetectorComponent*> fComponents;
+  std::map<std::string, DetectorComponent*> fComponents;
 };
 
 }  // namespace RAT
