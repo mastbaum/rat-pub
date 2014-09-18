@@ -13,6 +13,7 @@
 #include <RAT/GLG4VertexGen.hh>
 #include <RAT/VertexGen_IBD.hh>
 #include <RAT/Gen_LED.hh>
+#include <RAT/DecayManager.hh>
 #include <RAT/VertexGen_ES.hh>
 #include <RAT/VertexGen_Spectrum.hh>
 #include <RAT/DecayChain_Gen.hh>
@@ -105,6 +106,8 @@ void Gsim::Init() {
                                    new Alloc<GLG4Gen,CfGen>);
   GlobalFactory<GLG4Gen>::Register("led",
                                    new Alloc<GLG4Gen,Gen_LED>);
+  GlobalFactory<GLG4Gen>::Register("decaymanager",
+                                   new Alloc<GLG4Gen,DecayManager>);
   GlobalFactory<GLG4Gen>::Register("coincidence",
                                    new Alloc<GLG4Gen,Coincidence_Gen>);
 
