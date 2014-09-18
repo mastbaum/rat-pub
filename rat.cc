@@ -21,7 +21,7 @@
 
 #include <RAT/Config.hh>
 #include <RAT/Log.hh>
-#include <RAT/RunManager.hh>
+#include <RAT/Manager.hh>
 #include <RAT/InROOTProducer.hh>
 #include <RAT/InNetProducer.hh>
 #include <RAT/ProcBlock.hh>
@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
     TrackingMessenger *trackingMessenger = new TrackingMessenger();
   
     // Build event producers
-    RunManager* runManager = new RunManager(mainBlock);
+    Manager* runManager = new Manager(mainBlock);
     InROOTProducer *inroot = new InROOTProducer(mainBlock);
     InNetProducer *innet = new InNetProducer(mainBlock);
     // RATFsim *fsim = new RATFsim(analysisStack); // SOMEDAY!

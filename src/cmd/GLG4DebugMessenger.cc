@@ -2,9 +2,6 @@
 // $Id: GLG4DebugMessenger.cc,v 1.2 2005/09/15 21:57:04 sekula Exp $
 //
 // GLG4DebugMessenger.cc by Glenn Horton-Smith, Dec 1999
-////////////////////////////////////////////////////////////////
-// GLG4DebugMessenger
-////////////////////////////////////////////////////////////////
 
 #include "GLG4DebugMessenger.hh"
 #include "RAT/DetectorConstruction.hh"
