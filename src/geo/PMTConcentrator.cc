@@ -2,7 +2,7 @@
 #include <CLHEP/Units/SystemOfUnits.h>
 #include <G4Box.hh>
 #include <G4Polycone.hh>
-#include <G4PVPlacement.hh>
+#include <RAT/DetectorComponent.hh>
 #include <G4LogicalBorderSurface.hh>
 #include <G4VisAttributes.hh>
 #include <RAT/Log.hh>
@@ -70,7 +70,7 @@ PMTConcentrator::PMTConcentrator
   G4ThreeVector no_offset(0, 0, 0);
 
 
-  G4PVPlacement* oil_phys= new G4PVPlacement
+  DetectorComponent* oil_phys= new DetectorComponent
     ( 0,                   // no rotation
       no_offset,       // puts face equator in right place
       oil_logi,                    // the logical volume
@@ -79,7 +79,7 @@ PMTConcentrator::PMTConcentrator
       false,               // no boolean ops
       0 );                 // copy number
 
-  G4PVPlacement* conc_phys= new G4PVPlacement
+  DetectorComponent* conc_phys= new DetectorComponent
     ( 0,                   // no rotation
       no_offset,       // puts face equator in right place
       conc_logi,                    // the logical volume

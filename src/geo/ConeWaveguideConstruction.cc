@@ -7,7 +7,6 @@
 #include <G4VisAttributes.hh>
 #include <RAT/Materials.hh>
 #include <G4LogicalSkinSurface.hh>
-#include <G4PVPlacement.hh>
 #include <G4LogicalBorderSurface.hh>
 
 namespace RAT {

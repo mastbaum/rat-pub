@@ -6,7 +6,7 @@
 #include <G4VisAttributes.hh>
 #include <G4LogicalSkinSurface.hh>
 #include <G4SDManager.hh>
-#include <G4PVPlacement.hh>
+#include <RAT/DetectorComponent.hh>
 #include <vector>
 
 using namespace std;
@@ -234,7 +234,7 @@ namespace RAT {
 		// * each Solid occurs only once in one physical volume.  This saves
 		// * the GeometryManager some work. -GHS.
 		// ****************************************************************
-		new G4PVPlacement(solidrot,
+		new DetectorComponent(solidrot,
 				  solidpos,
 				  solidname,
 				  logiSolid,

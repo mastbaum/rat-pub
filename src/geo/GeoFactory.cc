@@ -1,22 +1,16 @@
-#include <RAT/GeoFactory.hh>
-#include <RAT/Log.hh>
-
 #include <vector>
-
-#include <G4SDManager.hh>
-
-#include <G4PVPlacement.hh>
-#include <G4PVReplica.hh>
-#include <G4PhysicalVolumeStore.hh>
-
 #include <G4LogicalVolume.hh>
 #include <G4LogicalVolumeStore.hh>
+#include <G4PhysicalVolumeStore.hh>
+#include <G4PVReplica.hh>
+#include <G4SDManager.hh>
+#include <RAT/DetectorComponent.hh>
+#include <RAT/Log.hh>
+#include <RAT/GeoFactory.hh>
 
 using namespace std;
 
-
 namespace RAT {
-
 
 std::map<std::string, GeoFactory *> GeoFactory::fFactoryMap;
 
@@ -126,7 +120,7 @@ GeoFactory::ConstructPhysicalVolume(G4LogicalVolume *logi,
     position.setZ(posvector[2] * mm);
   } catch (DBNotFoundError &e) { };
 
-  pv = new G4PVPlacement(rotation, position, logi, volume_name,
+  pv = new DetectorComponent(rotation, position, logi, volume_name,
                          mother, false /*?*/, 0 /*?*/);
 
   return pv;

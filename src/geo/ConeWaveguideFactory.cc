@@ -1,13 +1,13 @@
-#include <RAT/ConeWaveguideFactory.hh>
 #include <algorithm>
 #include <G4Cons.hh>
-#include <G4SubtractionSolid.hh>
+#include <G4LogicalBorderSurface.hh>
+#include <G4LogicalSkinSurface.hh>
 #include <G4Material.hh>
+#include <G4SubtractionSolid.hh>
 #include <G4VisAttributes.hh>
 #include <RAT/Materials.hh>
-#include <G4LogicalSkinSurface.hh>
-#include <G4PVPlacement.hh>
-#include <G4LogicalBorderSurface.hh>
+#include <RAT/DetectorComponent.hh>
+#include <RAT/ConeWaveguideFactory.hh>
 
 namespace RAT {
 
@@ -64,7 +64,7 @@ G4LogicalVolume *ConeWaveguideFactory::Construct(const std::string &name,
   G4LogicalVolume *cone_logi_whole = new G4LogicalVolume(cone_solid_whole, fMaterial, name+"_logi_whole");
 
   G4ThreeVector no_offset(0, 0, 0);
-  G4PVPlacement* in_phys= new G4PVPlacement
+  DetectorComponent* in_phys= new DetectorComponent
     ( 0,                   // no rotation
       no_offset,       // puts face equator in right place
       cone_logi_in,                    // the logical volume
@@ -72,7 +72,7 @@ G4LogicalVolume *ConeWaveguideFactory::Construct(const std::string &name,
       cone_logi_whole,           // the mother volume
       false,               // no boolean ops
       0 );                 // copy number
-  G4PVPlacement* out_phys= new G4PVPlacement
+  DetectorComponent* out_phys= new DetectorComponent
     ( 0,                   // no rotation
       no_offset,       // puts face equator in right place
       cone_logi_out,                    // the logical volume

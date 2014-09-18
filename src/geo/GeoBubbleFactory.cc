@@ -1,6 +1,6 @@
 #include <RAT/GeoBubbleFactory.hh>
 #include <G4VSolid.hh>
-#include <G4PVPlacement.hh>
+#include <RAT/DetectorComponent.hh>
 #include <G4LogicalVolume.hh>
 #include <G4Sphere.hh>
 #include <G4Material.hh>
@@ -67,7 +67,7 @@ namespace RAT {
       detail << "Bubble loc: " << bubble_point.x() << " " << bubble_point.y()
             << " " << bubble_point.z() << " " << bubble_point.mag() << newline;
       
-      new G4PVPlacement(0, bubble_point, logi_bubble, bubble_name, logi_mother, false,
+      new DetectorComponent(0, bubble_point, logi_bubble, bubble_name, logi_mother, false,
                         /* copy number */ i);
     }
         

@@ -1,28 +1,22 @@
-#include <GeoPMTFactoryBase.hh>
-#include <RAT/DB.hh>
-#include <RAT/Log.hh>
-
-#include <G4SDManager.hh>
-#include <G4PVPlacement.hh>
-
-#include <RAT/Materials.hh>
-#include <RAT/GLG4PMTSD.hh>
+#include <iostream>
+#include <vector>
+#include <G4FastSimulationManager.hh>
 #include <G4LogicalBorderSurface.hh>
+#include <G4PhysicsOrderedFreeVector.hh>
+#include <G4RandomDirection.hh>
+#include <G4SDManager.hh>
+#include <G4VFastSimulationModel.hh>
+#include <GLG4PMTOpticalModel.hh>
 #include <RAT/GLG4PMTSD.hh>
+#include <RAT/DB.hh>
+#include <RAT/DetectorComponent.hh>
 #include <RAT/DetectorConstruction.hh>
+#include <RAT/Factory.hh>
+#include <RAT/Log.hh>
+#include <RAT/Materials.hh>
 #include <RAT/PMTConstruction.hh>
 #include <RAT/WaveguideFactory.hh>
-#include <RAT/Factory.hh>
-#include <vector>
-
-#include "G4FastSimulationManager.hh"
-#include "G4VFastSimulationModel.hh"
-#include "GLG4PMTOpticalModel.hh"
-#include "G4PhysicsOrderedFreeVector.hh"
-
-#include "G4RandomDirection.hh"
-
-#include "iostream"
+#include <GeoPMTFactoryBase.hh>
 
 using namespace std;
 
@@ -207,7 +201,7 @@ G4VPhysicalVolume *GeoPMTFactoryBase::ConstructPMTs(DBLinkPtr table,
                                                               vis_simple);
     offsetWg = waveguide_factory->GetPlacementOffset();
     if (pmtParam.useEnvelope) {
-        new G4PVPlacement
+        new DetectorComponent
     	      ( 0,                   // no rotation
     	        offsetWg,     
     	        logiWg,            // the logical volume
@@ -480,7 +474,7 @@ G4VPhysicalVolume *GeoPMTFactoryBase::ConstructPMTs(DBLinkPtr table,
     // * each PMT occurs only once in one physical volume.  This saves
     // * the GeometryManager some work. -GHS.
     // ****************************************************************
-    G4PVPlacement* thisPhysPMT = new G4PVPlacement(pmtrot,
+    DetectorComponent* thisPhysPMT = new DetectorComponent(pmtrot,
                       pmtpos,
                       pmtname,
                       logiPMT,
@@ -501,7 +495,7 @@ G4VPhysicalVolume *GeoPMTFactoryBase::ConstructPMTs(DBLinkPtr table,
       // into coordinates of mother
       G4ThreeVector offsetWg_rot = pmtrot->inverse()(offsetWg);
       G4ThreeVector waveguidepos = pmtpos + offsetWg_rot;
-      new G4PVPlacement(
+      new DetectorComponent(
         pmtrot,               
         waveguidepos,      
         pmtname+"_waveguide", // a name for this physical volume

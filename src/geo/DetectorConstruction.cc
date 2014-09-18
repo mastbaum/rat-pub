@@ -14,6 +14,8 @@
 #include <RAT/GeoBuilder.hh>
 #include <RAT/Materials.hh>
 
+#include <RAT/DetectorComponent.hh>
+
 using namespace std;
 
 namespace RAT {
@@ -86,5 +88,5 @@ DetectorConstruction* DetectorConstruction::GetDetectorConstruction() {
   return sDetectorConstruction;
 }
 
-}
+}  // namespace RAT
 

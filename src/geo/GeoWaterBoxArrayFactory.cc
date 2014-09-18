@@ -4,7 +4,7 @@
 #include <RAT/DB.hh>
 #include <RAT/Log.hh>
 
-#include <G4PVPlacement.hh>
+#include <RAT/DetectorComponent.hh>
 
 #include <RAT/Materials.hh>
 
@@ -57,7 +57,7 @@ namespace RAT {
       position.setX(box_x[i]);
       position.setY(box_y[i]);
       position.setZ(box_z[i]);
-      new G4PVPlacement(0, // no rotation
+      new DetectorComponent(0, // no rotation
 			position,
 			waterBox_log, // the water box logical volume
 			pvp_string, // a name for Geant 4, unique

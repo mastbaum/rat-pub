@@ -1,11 +1,11 @@
 #include <RAT/WaterBoxConstruction.hh>
+#include <RAT/DetectorComponent.hh>
 #include <G4Box.hh>
 #include <G4SubtractionSolid.hh>
 #include <G4Sphere.hh>
 #include <G4Orb.hh>
 #include <G4VisAttributes.hh>
 #include <G4IntersectionSolid.hh>
-#include <G4PVPlacement.hh>
 #include <G4Material.hh>
 
 using namespace std;
@@ -40,7 +40,7 @@ namespace RAT {
     airbox_log->SetVisAttributes(airbox_vis);
 
     G4ThreeVector vec(0,0,0);
-    new G4PVPlacement((G4RotationMatrix*)0, vec, airbox_log, 
+    new DetectorComponent((G4RotationMatrix*)0, vec, airbox_log,
 		      logbasename+"_airp", thebox_log, 0, 0);
 
 
@@ -51,7 +51,7 @@ namespace RAT {
 
 
     G4double cornervoid = table->GetD("airgapincorner");
-    G4ThreeVector sz(size[0]/2-thickness, size[1]/2-thickness, 
+    G4ThreeVector sz(size[0]/2-thickness, size[1]/2-thickness,
 		     size[2]/2-thickness);
     double_t radiuswater = sz.mag() - cornervoid;
     G4Orb* water_spherepart = new G4Orb(logbasename  + "_sph",
@@ -67,7 +67,7 @@ namespace RAT {
     waterboxwater_vis->SetColor(0,0,1);
     waterboxwater_log->SetVisAttributes(waterboxwater_vis);
 
-    new G4PVPlacement(0, G4ThreeVector(0,0,0), waterboxwater_log, 
+    new DetectorComponent(0, G4ThreeVector(0,0,0), waterboxwater_log,
 		      logbasename+"_waterp", airbox_log, 0, 0); 
 
 

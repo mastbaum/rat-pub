@@ -8,7 +8,7 @@
 #include <RAT/PMTConstruction.hh>
 #include <RAT/GeoPMTParser.hh>
 #include <RAT/Log.hh>
-#include <G4PVPlacement.hh>
+#include <RAT/DetectorComponent.hh>
 #include <RAT/Materials.hh>
 #include <G4LogicalBorderSurface.hh>
 #include <G4OpticalSurface.hh>
@@ -108,7 +108,7 @@ G4VPhysicalVolume *GeoReflectorFactory::Construct(DBLinkPtr table)
                                 volume_name+"_out_logi");
   G4ThreeVector no_offset(0, 0, 0);
 
-  G4PVPlacement* in_phys= new G4PVPlacement
+  DetectorComponent* in_phys= new DetectorComponent
     ( 0,                   // no rotation
       no_offset,       // puts face equator in right place
       in_logi,                    // the logical volume
@@ -116,7 +116,7 @@ G4VPhysicalVolume *GeoReflectorFactory::Construct(DBLinkPtr table)
       whole_logi,           // the mother volume
       false,               // no boolean ops
       0 );                 // copy number
-  G4PVPlacement* out_phys= new G4PVPlacement
+  DetectorComponent* out_phys= new DetectorComponent
     ( 0,                   // no rotation
       no_offset,       // puts face equator in right place
       out_logi,                    // the logical volume
@@ -129,8 +129,8 @@ G4VPhysicalVolume *GeoReflectorFactory::Construct(DBLinkPtr table)
   new G4LogicalBorderSurface(volume_name+"_surface2",
                              out_phys, in_phys, RefSurface);
 
-  /*G4PVPlacement* whole_phys=*/
-  new G4PVPlacement
+  /*DetectorComponent* whole_phys=*/
+  new DetectorComponent
     ( 0,                   // no rotation
       no_offset,       // puts face equator in right place
       volume_name,         // a name for this physical volume

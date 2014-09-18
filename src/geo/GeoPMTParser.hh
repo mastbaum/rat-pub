@@ -38,7 +38,7 @@ namespace RAT {
     };
 
     /** Returns the rotation matrix required to orient PMT of index i
-     *  in a G4PVPlacement.  By GEANT4 convention, this is a passive rotation.
+     *  in a DetectorComponent.  By GEANT4 convention, this is a passive rotation.
      *  Use the invert() method to convert it to an active rotation if you
      *  want to apply it to a vector.*/
     G4RotationMatrix GetPMTRotation(int i) const;

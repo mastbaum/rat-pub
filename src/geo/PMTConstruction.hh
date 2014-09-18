@@ -9,7 +9,7 @@
 #include <G4VSensitiveDetector.hh>
 #include <G4VSolid.hh>
 #include <G4LogicalVolume.hh>
-#include <G4PVPlacement.hh>
+#include <RAT/DetectorComponent.hh>
 
 namespace RAT {
 
@@ -54,7 +54,7 @@ public:
   PMTConstruction (const PMTConstructionParams &params);
   G4LogicalVolume *NewPMT(const std::string &prefix, bool simpleVis=false);
   GLG4TorusStack *NewBodySolid(const std::string &name);
-  void SetPMTOpticalSurfaces(G4PVPlacement *body_phys, const std::string &name_prefix);
+  void SetPMTOpticalSurfaces(DetectorComponent *body_phys, const std::string &name_prefix);
 protected:
   G4VSolid *NewEnvelopeSolid(const std::string &name);
   
@@ -62,11 +62,11 @@ protected:
                        std::vector<double> &innerZEdge, std::vector<double> &innerRhoEdge,
                        int &equatorIndex, double &zLowestDynode);  
   // phyiscal volumes 
-  G4PVPlacement* body_phys;
-  G4PVPlacement* inner1_phys;
-  G4PVPlacement* inner2_phys;
-  G4PVPlacement* central_gap_phys; 
-  G4PVPlacement* dynode_phys;                  
+  DetectorComponent* body_phys;
+  DetectorComponent* inner1_phys;
+  DetectorComponent* inner2_phys;
+  DetectorComponent* central_gap_phys;
+  DetectorComponent* dynode_phys;
   
   PMTConstructionParams fParams;
 };

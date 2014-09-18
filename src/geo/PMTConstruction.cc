@@ -2,6 +2,7 @@
 #include <RAT/Log.hh>
 #include <RAT/PMTConstruction.hh>
 #include <RAT/GLG4PMTOpticalModel.hh>
+#include <RAT/DetectorComponent.hh>
 #include <G4Tubs.hh>
 #include <G4SubtractionSolid.hh>
 #include <G4Region.hh>
@@ -91,7 +92,7 @@ namespace RAT {
     body_phys=0;
     if (fParams.useEnvelope) {
       // place body in envelope
-      body_phys= new G4PVPlacement
+      body_phys= new DetectorComponent
         ( 0,                   // no rotation
           noTranslation,      // Bounding envelope already constructed to put equator at origin
           body_log,            // the logical volume
@@ -102,7 +103,7 @@ namespace RAT {
     }
     
     // place inner solids in outer solid (vacuum)
-    inner1_phys= new G4PVPlacement
+    inner1_phys= new DetectorComponent
       ( 0,                   // no rotation
         G4ThreeVector(0.0, 0.0, 2.*hhgap),       // puts face equator in right place, in front of tolerance gap
 	inner1_log,                    // the logical volume
@@ -111,7 +112,7 @@ namespace RAT {
         false,               // no boolean ops
         0 );                 // copy number
     
-    inner2_phys= new G4PVPlacement
+    inner2_phys= new DetectorComponent
       ( 0,                   // no rotation
         noTranslation,       // puts face equator in right place, behind the tolerance gap
 	inner2_log,                    // the logical volume
@@ -120,7 +121,7 @@ namespace RAT {
         false,               // no boolean ops
         0 );                 // copy number
     // place gap between inner1 and inner2
-    central_gap_phys= new G4PVPlacement
+    central_gap_phys= new DetectorComponent
       ( 0,                   // no rotation
         G4ThreeVector(0.0, 0.0, hhgap),        // puts face equator in right place, between inner1 and inner2
 	central_gap_log,                       // the logical volume
@@ -129,7 +130,7 @@ namespace RAT {
         false,               // no boolean ops
         0 );                 // copy number 
     // place dynode in stem/back
-    dynode_phys= new G4PVPlacement
+    dynode_phys= new DetectorComponent
       ( 0,
         G4ThreeVector(0.0, 0.0, fParams.dynodeTop - hhDynode),
         prefix+"_dynode_phys",
@@ -205,7 +206,7 @@ namespace RAT {
                            &fParams.zEdge[0], &fParams.rhoEdge[0], &fParams.zOrigin[0]);
     return body;
   }
-  void PMTConstruction::SetPMTOpticalSurfaces(G4PVPlacement *body_phys, const std::string &prefix)
+  void PMTConstruction::SetPMTOpticalSurfaces(DetectorComponent *body_phys, const std::string &prefix)
   { 
     /* Set the optical surfaces for a PMT. This must be called *after* the physical PMT has been placed  
        If this is not done, the mirror surface is not created.
