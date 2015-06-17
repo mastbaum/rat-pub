@@ -219,7 +219,7 @@ void Materials::ConstructMaterials() {
 
 
 bool Materials::BuildMaterial(string namedb, DBLinkPtr table) {
-  G4MaterialPropertiesTable* mpt = NULL;
+ G4MaterialPropertiesTable* mpt = NULL;
 
   double densitydb;
   int nelementsdb;
@@ -418,6 +418,7 @@ Materials::LoadProperty(DBLinkPtr table, std::string name) {
     pv->InsertValues(E_value, p_value);
   }
 
+
   return pv;
 }
 
@@ -430,7 +431,6 @@ Materials::BuildMaterialPropertiesTable(G4Material* material, DBLinkPtr table) {
   }
 
   std::string name = std::string(material->GetName());
-
   // Determine which fields to load
   vector<std::string> props;
   try {
@@ -467,7 +467,8 @@ Materials::BuildMaterialPropertiesTable(G4Material* material, DBLinkPtr table) {
     }
 
     // Otherwise, this is a property vector
-    G4MaterialPropertyVector* pv = mpt->GetProperty((*i).c_str());
+    G4cout << "Property vector " << *i << G4endl;
+	G4MaterialPropertyVector* pv = mpt->GetProperty((*i).c_str());
     if (!pv) {
       pv = LoadProperty(table, *i);
     }
@@ -484,9 +485,8 @@ Materials::BuildMaterialPropertiesTable(G4Material* material, DBLinkPtr table) {
 
 void Materials::LoadOptics() {
   DBLinkGroup mats = DB::Get()->GetLinkGroup("OPTICS");
-
   // Load everything in OPTICS
-  for (DBLinkGroup::iterator iv=mats.begin(); iv!=mats.end(); iv++) {
+  for (DBLinkGroup::iterator iv=mats.begin(); iv!=mats.end() ; iv++) {
     std::string name = iv->first;
     G4cout << "Loading optics: " << name << G4endl;
     
@@ -553,7 +553,10 @@ void Materials::LoadOptics() {
     // e.g. absorb on X and reemit with the right spectrum
     G4double* attenuation_coeff_x = NULL;
     G4double* attenuation_coeff_y = NULL;
+    G4double* scint_x = NULL;
+    G4double* scint_y = NULL;
     G4int n_entries = 0;
+    G4int s_entries = 0;
 
     mpt->AddConstProperty("NCOMPONENTS", components.size());
     for (size_t i=0; i<components.size(); i++) {
@@ -600,21 +603,39 @@ void Materials::LoadOptics() {
 
             if (!attenuation_coeff_x) {
               n_entries = attVector->GetVectorLength();
+		Log::Assert(n_entries > 5, "More sampling points are necessary for accurate model");
               attenuation_coeff_x = new G4double[n_entries];
               attenuation_coeff_y = new G4double[n_entries];
               for (G4int ientry=0; ientry<n_entries; ientry++) {
                 G4double energy = attVector->Energy(ientry);
-                attenuation_coeff_x[ientry] = energy;
-                attenuation_coeff_y[ientry] = 1.0 / attVector->Value(energy);
+		attenuation_coeff_x[ientry] = energy;
+		attenuation_coeff_y[ientry] = 1.0 / attVector->Value(energy);
               }
             }
             else {
               for (G4int ientry=0; ientry<n_entries; ientry++) {
-                G4double ahere = attVector->Value(attenuation_coeff_x[ientry]);
-                attenuation_coeff_y[ientry] += 1.0 / ahere;
+		G4double ahere = attVector->Value(attenuation_coeff_x[ientry]);
+                attenuation_coeff_y[ientry] += 1.0 /  ahere;
               }
             }
+	   attVector->ScaleVector(1.0, fraction);
           }
+	 if (name.find("SCINTILLATION") != std::string::npos) {
+                 G4MaterialPropertyVector* scintVector = it->second;
+                 scintVector->ScaleVector(1.0, fraction);
+                 if (!scint_x) {
+                   s_entries = scintVector->GetVectorLength();
+                   scint_x = new G4double[s_entries];
+                   scint_y = new G4double[s_entries];
+                   for (G4int ientry = 0; ientry < s_entries; ientry++) {
+                       G4double energy = scintVector->Energy(ientry);
+                       scint_x[ientry] = energy;
+                       scint_y[ientry] = scintVector->Value(energy);
+                      G4cout << "Scint x :" << scint_x[ientry] << " and scint y: " << scint_y[ientry] << G4endl;
+                   }
+                 }
+		scintVector->ScaleVector(1.0, 1.0 /fraction);
+              }
 
           std::stringstream ss;
           ss << name;
@@ -623,7 +644,8 @@ void Materials::LoadOptics() {
           if (name.find("SCINTILLATION") == std::string::npos &&
               name.find("SCINTWAVEFORM") == std::string::npos &&
               name.find("SCINTMOD")      == std::string::npos) {
-            ss << i;
+	      ss << i;
+	      G4cout <<ss.str().c_str() << G4endl;
           }
 
           mpt->AddProperty(ss.str().c_str(), it->second);
@@ -637,12 +659,21 @@ void Materials::LoadOptics() {
       pv_abs = new G4MaterialPropertyVector();
       for (G4int ientry=0; ientry<n_entries; ientry++) {
         pv_abs->InsertValues(attenuation_coeff_x[ientry],
-                             1.0 / attenuation_coeff_y[ientry]);
-      }
+                             1.0 /  attenuation_coeff_y[ientry]);
+	}
+
+    }
+    G4MaterialPropertyVector* pv_scint = NULL;
+    if (s_entries > 0) {
+     pv_scint = new G4MaterialPropertyVector();
+     for (G4int ientry = 0; ientry < s_entries; ientry++) {
+        pv_scint->InsertValues(scint_x[ientry], scint_y[ientry]);
+     }
     }
 
-    mpt->AddProperty("ABSLENGTH", pv_abs);
 
+    mpt->AddProperty("ABSLENGTH", pv_abs);
+    mpt->AddProperty("SCINTILLATION" , pv_scint);
     // FIXME debugging output
     G4cout << "----" << G4endl;
     std::map<G4String,
