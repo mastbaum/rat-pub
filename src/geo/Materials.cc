@@ -219,7 +219,7 @@ void Materials::ConstructMaterials() {
 
 
 bool Materials::BuildMaterial(string namedb, DBLinkPtr table) {
- G4MaterialPropertiesTable* mpt = NULL;
+  G4MaterialPropertiesTable* mpt = NULL;
 
   double densitydb;
   int nelementsdb;
@@ -418,7 +418,6 @@ Materials::LoadProperty(DBLinkPtr table, std::string name) {
     pv->InsertValues(E_value, p_value);
   }
 
-
   return pv;
 }
 
@@ -431,6 +430,7 @@ Materials::BuildMaterialPropertiesTable(G4Material* material, DBLinkPtr table) {
   }
 
   std::string name = std::string(material->GetName());
+
   // Determine which fields to load
   vector<std::string> props;
   try {
@@ -484,6 +484,7 @@ Materials::BuildMaterialPropertiesTable(G4Material* material, DBLinkPtr table) {
 
 void Materials::LoadOptics() {
   DBLinkGroup mats = DB::Get()->GetLinkGroup("OPTICS");
+
   // Load everything in OPTICS
   for (DBLinkGroup::iterator iv=mats.begin(); iv!=mats.end(); iv++) {
     std::string name = iv->first;
@@ -607,13 +608,13 @@ void Materials::LoadOptics() {
               attenuation_coeff_y = new G4double[n_entries];
               for (G4int ientry=0; ientry<n_entries; ientry++) {
                 G4double energy = attVector->Energy(ientry);
-		attenuation_coeff_x[ientry] = energy;
-		attenuation_coeff_y[ientry] = 1.0 / attVector->Value(energy);
+                attenuation_coeff_x[ientry] = energy;
+                attenuation_coeff_y[ientry] = 1.0 / attVector->Value(energy);
               }
             }
             else {
               for (G4int ientry=0; ientry<n_entries; ientry++) {
-		G4double ahere = attVector->Value(attenuation_coeff_x[ientry]);
+                G4double ahere = attVector->Value(attenuation_coeff_x[ientry]);
                 attenuation_coeff_y[ientry] += 1.0 / ahere;
               }
             }
