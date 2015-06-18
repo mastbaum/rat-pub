@@ -643,7 +643,7 @@ void Materials::LoadOptics() {
           if (name.find("SCINTILLATION") == std::string::npos &&
               name.find("SCINTWAVEFORM") == std::string::npos &&
               name.find("SCINTMOD")      == std::string::npos) {
-              ss << i;
+            ss << i;
           }
 
           mpt->AddProperty(ss.str().c_str(), it->second);
@@ -669,9 +669,9 @@ void Materials::LoadOptics() {
      }
     }
 
-
     mpt->AddProperty("ABSLENGTH", pv_abs);
     mpt->AddProperty("SCINTILLATION", pv_scint);
+
     // FIXME debugging output
     G4cout << "----" << G4endl;
     std::map<G4String,
