@@ -643,7 +643,7 @@ void Materials::LoadOptics() {
           if (name.find("SCINTILLATION") == std::string::npos &&
               name.find("SCINTWAVEFORM") == std::string::npos &&
               name.find("SCINTMOD")      == std::string::npos) {
-	      ss << i;
+              ss << i;
           }
 
           mpt->AddProperty(ss.str().c_str(), it->second);
