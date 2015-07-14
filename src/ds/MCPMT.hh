@@ -35,13 +35,13 @@ public:
   virtual void SetType(Int_t _type) { type = _type; };
 
   /** List of photoelectrons created in this PMT. */
-  MCPhoton* GetMCPhoton(Int_t i) { return &photon[i]; }
-  Int_t GetMCPhotonCount() const { return photon.size(); }
-  MCPhoton* AddNewMCPhoton() {
+  virtual MCPhoton* GetMCPhoton(Int_t i) { return &photon[i]; }
+  virtual Int_t GetMCPhotonCount() const { return photon.size(); }
+  virtual MCPhoton* AddNewMCPhoton() {
     photon.resize(photon.size() + 1);
     return &photon.back();
   }
-  void PruneMCPhoton() { photon.resize(0); }
+  virtual void PruneMCPhoton() { photon.resize(0); }
  
   ClassDef(MCPMT, 1)
     
