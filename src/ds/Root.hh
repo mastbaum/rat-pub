@@ -140,7 +140,7 @@ public:
 protected:
   int runID;
   std::string ratVersion;
-  std::vector< std::pair<std::string, int> > procResult;
+  std::vector<std::pair<std::string, int> > procResult;
   std::vector<MC> mc;
   std::vector<Calib> calib;
   std::vector<EV> ev;
