@@ -11,6 +11,7 @@
 #pragma link C++ class RAT::DS::MCPhoton+;
 #pragma link C++ class RAT::DS::MCSummary+;
 #pragma link C++ class RAT::DS::Calib+;
+#pragma link C++ class RAT::DS::MCSecondaryHit+;
 
 #pragma link C++ class RAT::DS::EV+;
 #pragma link C++ class RAT::DS::PMT+;
@@ -62,6 +63,7 @@
 #pragma link C++ class vector<RAT::DS::MCPMT>;
 #pragma link C++ class vector<RAT::DS::MCPhoton>;
 #pragma link C++ class vector<RAT::DS::Calib>;
+#pragma link C++ class vector<RAT::DS::MCSecondaryHit>;
 #pragma link C++ class vector<RAT::DS::EV>;
 #pragma link C++ class vector<RAT::DS::PMT>;
 #pragma link C++ class vector< pair<string, int> >;
@@ -75,6 +77,7 @@
 #pragma link C++ class vector<RAT::DS::MCPMT*>;
 #pragma link C++ class vector<RAT::DS::MCPhoton*>;
 #pragma link C++ class vector<RAT::DS::MCTrackStep*>;
+#pragma link C++ class vector<RAT::DS::MCSecondaryHit*>;
 
 #endif
 

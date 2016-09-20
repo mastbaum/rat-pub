@@ -6,8 +6,8 @@
 #include <RAT/EventInfo.hh>
 #include <RAT/DS/RunStore.hh>
 #include <RAT/DetectorConstruction.hh>
-#include <RAT/BWVetGenericChamber.hh>
-#include <RAT/BWVetGenericChamberHit.hh>
+#include <RAT/GenericChamber.hh>
+#include <RAT/GenericChamberHit.hh>
 
 #include <RAT/Factory.hh>
 #include <RAT/GLG4VertexGen.hh>
@@ -582,6 +582,28 @@ void Gsim::MakeEvent(const G4Event* g4ev, DS::Root* ds) {
       rat_mcpmt->SetType(fPMTInfo->GetType(pmtid));
     }
     AddMCPhoton(mc->GetMCPMT(mcpmtObjects[pmtid]), hit, true, (StoreOpticalTrackID ? exinfo : NULL));
+  }
+
+  /**
+   * Handle secondary detector hits.
+   */
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  GenericChamber* secondarysd = NULL;
+  secondarysd = \
+    (GenericChamber*)(SDman->FindSensitiveDetector("/mydet/veto/genericchamber"));
+
+  if (secondarysd) {
+    for (size_t i=0; i<secondarysd->hit_x.size(); i++) {
+      DS::MCSecondaryHit* secondaryhit = mc->AddNewMCSecondaryHit();
+      secondaryhit->SetPosition(TVector3(secondarysd->hit_x[i],
+                                         secondarysd->hit_y[i],
+                                         secondarysd->hit_z[i]));
+      secondaryhit->SetEdep(secondarysd->hit_E[i]);
+      secondaryhit->SetTime(secondarysd->hit_time[i]);
+      secondaryhit->SetPDGCode(secondarysd->hit_pdg[i]);
+      secondaryhit->SetVolID(secondarysd->hit_uid[i]);
+      secondaryhit->SetVolume(secondarysd->hit_volume[i]);
+    }
   }
 }
 

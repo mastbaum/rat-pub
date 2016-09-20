@@ -21,6 +21,7 @@
 #include <RAT/DS/MCTrack.hh>
 #include <RAT/DS/MCSummary.hh>
 #include <RAT/DS/MCPMT.hh>
+#include <RAT/DS/MCSecondaryHit.hh>
 
 namespace RAT {
   namespace DS {
@@ -102,6 +103,15 @@ public:
   };
   virtual void PrunePMT() { pmt.resize(0); }
 
+  /** List of secondary detector hits */
+  virtual MCSecondaryHit* GetMCSecondaryHit(int i) { return &secondaryhit[i]; }
+  virtual int GetMCSecondaryHitCount() const { return secondaryhit.size(); }
+  virtual MCSecondaryHit* AddNewMCSecondaryHit() {
+    secondaryhit.resize(secondaryhit.size() + 1);
+    return &secondaryhit.back();
+  };
+  virtual void PruneSecondaryHit() { secondaryhit.resize(0); }
+
   /** Total number of photoelectrons generated in this event */
   virtual int GetNumPE() const { return numPE; }
   virtual void SetNumPE(int _numPE) { numPE = _numPE; }
@@ -120,7 +130,7 @@ public:
   virtual bool ExistMCSummary() const { return !summary.empty(); }
   virtual void PruneMCSummary() { summary.resize(0); }
 
-  ClassDef(MC, 1)
+  ClassDef(MC, 2)
     
 protected:
   int id;
@@ -132,6 +142,7 @@ protected:
   std::vector<MCParticle> parent;
   std::vector<MCTrack> track;
   std::vector<MCPMT> pmt;
+  std::vector<MCSecondaryHit> secondaryhit;
 };
 
   } // namespace DS
