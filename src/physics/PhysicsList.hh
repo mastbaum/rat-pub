@@ -13,11 +13,13 @@
 
 #include <string>
 #include <G4VUserPhysicsList.hh>
-#include <Shielding.hh>
+//#include <Shielding.hh>
+#include <QGSP_BERT.hh>
 
 namespace RAT {
 
-class PhysicsList : public Shielding {
+//class PhysicsList : public Shielding {
+class PhysicsList : public QGSP_BERT {
 public:
   PhysicsList();
 

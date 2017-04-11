@@ -1,6 +1,7 @@
 #include <string>
 #include <stdexcept>
-#include <Shielding.hh>
+//#include <Shielding.hh>
+#include <QGSP_BERT.hh>
 #include <G4Cerenkov.hh>
 #include <G4FastSimulationManagerProcess.hh>
 #include <G4HadronicInteractionRegistry.hh>
@@ -15,6 +16,7 @@
 #include <G4ProcessVector.hh>
 #include <G4OpBoundaryProcess.hh>
 #include <G4RunManager.hh>
+#include <CLHEP/Units/SystemOfUnits.h>
 #include <RAT/GLG4OpAttenuation.hh>
 #include <RAT/GLG4Scint.hh>
 #include <RAT/GLG4SteppingAction.hh>
@@ -25,20 +27,23 @@
 
 namespace RAT {
 
-PhysicsList::PhysicsList() : Shielding(), wlsModel(NULL) {
+//PhysicsList::PhysicsList() : Shielding(), wlsModel(NULL) {
+PhysicsList::PhysicsList() : QGSP_BERT(), wlsModel(NULL) {
   new PhysicsListMessenger(this);
 }
 
 PhysicsList::~PhysicsList() {}
 
 void PhysicsList::ConstructParticle() {
-  Shielding::ConstructParticle();
+  //Shielding::ConstructParticle();
+  QGSP_BERT::ConstructParticle();
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
 
 void PhysicsList::ConstructProcess() {
   AddParameterization();
-  Shielding::ConstructProcess();
+  //Shielding::ConstructProcess();
+  QGSP_BERT::ConstructProcess();
   ConstructOpticalProcesses();
   EnableThermalNeutronScattering();
 }
@@ -69,23 +74,23 @@ void PhysicsList::EnableThermalNeutronScattering() {
   }
 
   // Get the "regular" neutron HP elastic scattering model
-  G4HadronicInteraction* n_elastic_hp
-    = G4HadronicInteractionRegistry::Instance()->FindModel("NeutronHPElastic");
-  if (!n_elastic_hp) {
-    std::cerr << "PhysicsList::EnableThermalNeutronScattering: "
-      << " couldn't find high-precision neutron elastic"
-      << " scattering interaction.\n";
-    throw std::runtime_error(std::string("Missing") + " NeutronHPElastic"
-      + " scattering interaction in PhysicsList");
-  }
+  //G4HadronicInteraction* n_elastic_hp
+  //  = G4HadronicInteractionRegistry::Instance()->FindModel("NeutronHPElastic");
+  //if (!n_elastic_hp) {
+  //  std::cerr << "PhysicsList::EnableThermalNeutronScattering: "
+  //    << " couldn't find high-precision neutron elastic"
+  //    << " scattering interaction.\n";
+  //  throw std::runtime_error(std::string("Missing") + " NeutronHPElastic"
+  //    + " scattering interaction in PhysicsList");
+  //}
 
   // Exclude the thermal scattering region (below 4 eV) from the "regular"
   // elastic scattering model
-  n_elastic_hp->SetMinEnergy(4.*eV);
+  //n_elastic_hp->SetMinEnergy(4.*CLHEP::eV);
 
   // Use the more detailed HP thermal scattering treatment below 4 eV instead
-  n_elastic_process->RegisterMe(new G4NeutronHPThermalScattering);
-  n_elastic_process->AddDataSet(new G4NeutronHPThermalScatteringData);
+  //n_elastic_process->RegisterMe(new G4NeutronHPThermalScattering);
+  //n_elastic_process->AddDataSet(new G4NeutronHPThermalScatteringData);
 }
 
 void PhysicsList::SetOpWLSModel(std::string model) {
